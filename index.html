@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LearnByDoing</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #4a90e2;
+  --accent: #f5a623;
+  --bg: #f5f5f5;
+  --card: #fff;
+  --text: #222;
+  --success: #dff0d8;
+  --error: #f2dede;
+}
+* {box-sizing:border-box;}
+body {margin:0; font-family:'Roboto', sans-serif; background:var(--bg); color:var(--text);}
+header {background:var(--primary); color:white; padding:50px 20px; text-align:center; position:relative;}
+header h1 {margin-bottom:10px; font-size:2.5em;}
+header p {font-size:1.2em; margin-bottom:20px;}
+.navbar {background:#fff; display:flex; justify-content:center; padding:10px 0; box-shadow:0 2px 5px rgba(0,0,0,0.1);}
+.navbar button {margin:0 10px; padding:10px 20px; border:none; border-radius:6px; cursor:pointer; background:var(--accent); color:white; font-weight:bold; transition:0.2s;}
+.navbar button:hover {opacity:0.9;}
+.section {max-width:900px; margin:40px auto; padding:0 20px;}
+h2 {margin-bottom:20px; color:var(--primary);}
+.card {background:var(--card); padding:20px; border-radius:12px; margin-bottom:30px; box-shadow:0 2px 10px rgba(0,0,0,0.05);}
+input, textarea, select {padding:10px; width:80%; font-size:16px; margin-top:10px; border-radius:5px; border:1px solid #ccc;}
+pre {background:#eee; padding:10px; border-radius:5px; overflow-x:auto;}
+.output {background:var(--success); padding:10px; margin-top:10px; border-radius:5px; display:none;}
+.error {background:var(--error); padding:10px; margin-top:10px; border-radius:5px; display:none;}
+.subject-section {display:none;}
+.active-subject {display:block;}
+.progress {margin-top:10px; font-size:0.9em; color:#555;}
+.badges {margin-top:10px;}
+.badge {display:inline-block; background:var(--accent); color:white; padding:5px 10px; border-radius:10px; margin:5px; font-size:0.9em;}
+.level {margin-top:20px; font-weight:bold; font-size:1.1em;}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>📘 LearnByDoing</h1>
+  <p>Learn by solving real problems — gamified & interactive!</p>
+  <div class="level" id="userLevel">Level: Beginner | XP: 0</div>
+</header>
+
+<div class="navbar">
+  <button onclick="showSubject('dashboard')">🏆 Dashboard</button>
+  <button onclick="showSubject('math')">🧮 Math</button>
+  <button onclick="showSubject('programming')">💻 Programming</button>
+  <button onclick="showSubject('logic')">🧠 Logic</button>
+  <button onclick="showSubject('science')">🌍 Science</button>
+</div>
+
+<!-- DASHBOARD -->
+<div class="section subject-section" id="dashboard">
+  <h2>🏆 Your Dashboard</h2>
+  <div class="card">
+    <div id="dashboardXP">XP: 0</div>
+    <div id="dashboardLevel">Level: Beginner</div>
+    <div id="dashboardBadges" class="badges">Badges: None</div>
+    <div id="dashboardSubjects">Subject Progress:</div>
+  </div>
+</div>
+
+<!-- MATH -->
+<div class="section subject-section" id="math">
+  <h2>🧮 Math: Algebra Basics</h2>
+  <div class="card">
+    <p><strong>Explain:</strong> An equation is like a balance. Whatever you do on one side, you must do on the other.</p>
+    <pre>x + <span id="mathAddend">?</span> = <span id="mathSum">?</span></pre>
+    <input type="number" id="mathAnswer" placeholder="Your answer">
+    <button class="btn" onclick="checkMath()">Check Answer</button>
+    <div class="output" id="mathCorrect">✅ Correct!</div>
+    <div class="error" id="mathWrong">❌ Not correct!</div>
+    <div class="progress" id="mathProgress"></div>
+  </div>
+</div>
+
+<!-- PROGRAMMING -->
+<div class="section subject-section" id="programming">
+  <h2>💻 Programming: Variables (JavaScript)</h2>
+  <div class="card">
+    <p><strong>Explain:</strong> A variable stores data. Example: <pre>let score = 10;</pre></p>
+    <textarea id="codeInput" rows="4">let a = 5;
+let b = 3;
+// Create variable sum = a + b
+</textarea><br>
+    <button class="btn" onclick="runCode()">Run Code</button>
+    <div class="output" id="codeOutput"></div>
+    <div class="error" id="codeError"></div>
+    <div class="progress" id="progProgress"></div>
+  </div>
+</div>
+
+<!-- LOGIC -->
+<div class="section subject-section" id="logic">
+  <h2>🧠 Logic: Patterns</h2>
+  <div class="card">
+    <p>What comes next? 2, 4, 8, 16, ?</p>
+    <input type="number" id="logicAnswer" placeholder="Your answer">
+    <button class="btn" onclick="checkLogic()">Check Answer</button>
+    <div class="output" id="logicCorrect">✅ Correct!</div>
+    <div class="error" id="logicWrong">❌ Not correct!</div>
+    <div class="progress" id="logicProgress"></div>
+  </div>
+</div>
+
+<!-- SCIENCE -->
+<div class="section subject-section" id="science">
+  <h2>🌍 Science: Photosynthesis</h2>
+  <div class="card">
+    <p><strong>Explain:</strong> Plants make food using sunlight, water, and CO₂.</p>
+    <select id="scienceAnswer">
+      <option value="">Select answer</option>
+      <option value="water">Water</option>
+      <option value="sunlight">Sunlight</option>
+      <option value="oxygen">Oxygen</option>
+    </select>
+    <button class="btn" onclick="checkScience()">Check Answer</button>
+    <div class="output" id="scienceCorrect">✅ Correct!</div>
+    <div class="error" id="scienceWrong">❌ Not correct!</div>
+    <div class="progress" id="scienceProgress"></div>
+  </div>
+</div>
+
+<script>
+// Subjects and progress
+let subjects = ['math','programming','logic','science'];
+let progress = JSON.parse(localStorage.getItem('learnProgress')) || {
+  xp: 0, level: 1, badges: [], math: 0, programming:0, logic:0, science:0
+};
+
+function saveProgress(){
+  localStorage.setItem('learnProgress', JSON.stringify(progress));
+  updateDashboard();
+  updateProgressUI();
+}
+
+function updateDashboard(){
+  document.getElementById('dashboardXP').innerText = `XP: ${progress.xp}`;
+  document.getElementById('dashboardLevel').innerText = `Level: ${getLevelName(progress.level)}`;
+  document.getElementById('userLevel').innerText = `Level: ${getLevelName(progress.level)} | XP: ${progress.xp}`;
+  if(progress.badges.length) {
+    document.getElementById('dashboardBadges').innerHTML = 'Badges: ' + progress.badges.map(b=>`<span class="badge">${b}</span>`).join('');
+  } else {
+    document.getElementById('dashboardBadges').innerText = 'Badges: None';
+  }
+  document.getElementById('dashboardSubjects').innerHTML = subjects.map(s=>`${s}: ${progress[s]}/5`).join(' | ');
+}
+
+function getLevelName(lvl){
+  if(lvl<=5) return 'Beginner';
+  else if(lvl<=10) return 'Intermediate';
+  else return 'Advanced';
+}
+
+function checkLevelUp(){
+  if(progress.xp >= progress.level * 10){
+    progress.level += 1;
+    alert(`🎉 Level Up! You are now ${getLevelName(progress.level)}!`);
+  }
+}
+
+function awardBadge(name){
+  if(!progress.badges.includes(name)){
+    progress.badges.push(name);
+    alert(`🏅 Badge earned: ${name}`);
+  }
+}
+
+// Show only selected subject
+function showSubject(sub){
+  subjects.concat(['dashboard']).forEach(s => document.getElementById(s).classList.remove('active-subject'));
+  document.getElementById(sub).classList.add('active-subject');
+}
+
+// ================= Math =================
+let currentMath = {a: Math.floor(Math.random()*10)+1, b: Math.floor(Math.random()*10)+1};
+document.getElementById('mathAddend').innerText = currentMath.a;
+document.getElementById('mathSum').innerText = currentMath.a + currentMath.b;
+
+function checkMath(){
+  let ans = parseInt(document.getElementById('mathAnswer').value);
+  if(ans === currentMath.b){
+    document.getElementById('mathCorrect').style.display='block';
+    document.getElementById('mathWrong').style.display='none';
+    progress.math +=1;
+    progress.xp +=2;
+    if(progress.math===1) awardBadge('First Math Win');
+    if(progress.math===5) awardBadge('Math Master');
+    saveProgress();
+    checkLevelUp();
+    // generate new problem
+    currentMath = {a: Math.floor(Math.random()*10)+1, b: Math.floor(Math.random()*10)+1};
+    document.getElementById('mathAddend').innerText = currentMath.a;
+    document.getElementById('mathSum').innerText = currentMath.a + currentMath.b;
+    document.getElementById('mathAnswer').value='';
+  } else {
+    document.getElementById('mathWrong').style.display='block';
+    document.getElementById('mathCorrect').style.display='none';
+  }
+}
+
+function updateProgressUI(){
+  document.getElementById('mathProgress').innerText = `Progress: ${progress.math}/5`;
+  document.getElementById('progProgress').innerText = `Progress: ${progress.programming}/5`;
+  document.getElementById('logicProgress').innerText = `Progress: ${progress.logic}/5`;
+  document.getElementById('scienceProgress').innerText = `Progress: ${progress.science}/5`;
+}
+
+// ================= Logic =================
+function checkLogic(){
+  let ans = parseInt(document.getElementById('logicAnswer').value);
+  if(ans === 32){
+    document.getElementById('logicCorrect').style.display='block';
+    document.getElementById('logicWrong').style.display='none';
+    progress.logic +=1;
+    progress.xp +=2;
+    if(progress.logic===1) awardBadge('First Logic Win');
+    if(progress.logic===5) awardBadge('Logic Master');
+    saveProgress();
+    checkLevelUp();
+  } else {
+    document.getElementById('logicWrong').style.display='block';
+    document.getElementById('logicCorrect').style.display='none';
+  }
+}
+
+// ================= Programming =================
+function runCode(){
+  let code = document.getElementById('codeInput').value;
+  try{
+    let a=5,b=3,sum;
+    eval(code);
+    document.getElementById('codeOutput').style.display='block';
+    document.getElementById('codeOutput').innerText = `✅ Code ran! sum = ${sum !== undefined ? sum : 'N/A'}`;
+    document.getElementById('codeError').style.display='none';
+    progress.programming +=1;
+    progress.xp +=2;
+    if(progress.programming===1) awardBadge('First Code Win');
+    if(progress.programming===5) awardBadge('Programming Master');
+    saveProgress();
+    checkLevelUp();
+  } catch(e){
+    document.getElementById('codeError').style.display='block';
+    document.getElementById('codeError').innerText = '❌ Error: ' + e;
+    document.getElementById('codeOutput').style.display='none';
+  }
+}
+
+// ================= Science =================
+function checkScience(){
+  let ans = document.getElementById('scienceAnswer').value;
+  if(ans === 'sunlight'){
+    document.getElementById('scienceCorrect').style.display='block';
+    document.getElementById('scienceWrong').style.display='none';
+    progress.science +=1;
+    progress.xp +=2;
+    if(progress.science===1) awardBadge('First Science Win');
+    if(progress.science===5) awardBadge('Science Master');
+    saveProgress();
+    checkLevelUp();
+  } else {
+    document.getElementById('scienceWrong').style.display='block';
+    document.getElementById('scienceCorrect').style.display='none';
+  }
+}
+
+// INIT
+updateProgressUI();
+updateDashboard();
+showSubject('dashboard');
+</script>
+</body>
+      </html>
